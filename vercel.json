@@ -1,0 +1,14 @@
+{
+  "crons": [
+    {
+      "path": "/api/monitor-device",
+      "schedule": "*/10 * * * * *"
+    }
+  ],
+  "functions": {
+    "src/app/api/monitor-device/route.js": {
+      "maxDuration": 10
+    }
+  }
+}
+

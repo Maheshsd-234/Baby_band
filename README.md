@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Baby Band Safety Dashboard
 
-## Getting Started
+Premium Apple-inspired UI that listens to the ESP32 baby band via Firebase Realtime Database. Built with Next.js (App Router), TailwindCSS, and shadcn/ui primitives.
 
-First, run the development server:
+## Requirements
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+
+- Firebase Realtime Database URL
+- (Optional) Vercel CLI for deployment
+
+## Environment Variables
+
+Create `.env.local` inside `dashboard/`:
+
+```
+NEXT_PUBLIC_FIREBASE_URL=https://<your-db>.firebaseio.com
+NEXT_PUBLIC_FIREBASE_API_KEY=<optional-demo-key>
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=<project>.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=<project-id>
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=<project>.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=<sender-id>
+NEXT_PUBLIC_FIREBASE_APP_ID=<app-id>
+NEXT_PUBLIC_SIMULATE=false
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Set `NEXT_PUBLIC_SIMULATE=true` when you want the dashboard to run without hitting Firebase (local heartbeat generator + alert emitter).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Run Locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cd dashboard
+npm install
+npm run dev
+```
 
-## Learn More
+Navigate to [http://localhost:3000](http://localhost:3000). The UI listens to `/devices/baby1/state` and `/devices/baby1/alerts` in real time. Simulation buttons send REST calls to Firebase (or emit local alerts in simulate mode).
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Vercel is the recommended target. A helper script exists at the repo root:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+cd ..
+./scripts/deploy.sh
+```
 
-## Deploy on Vercel
+The script installs dependencies, builds the app, then runs `vercel --prod`. Ensure `vercel` CLI is authenticated beforehand.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Firebase Rules (demo)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See `../docs/firebase-schema.md` for the JSON structure and permissive rules used for demos. Lock down read/write access before shipping to production.
